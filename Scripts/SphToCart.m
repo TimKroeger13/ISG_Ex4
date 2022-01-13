@@ -1,6 +1,6 @@
 %% SphToCart
 % Discription:
-% Converts Catesian coordiantes to spherical coordinates
+% Converts spherical coordiantes to Catesian coordinates
 % everything should be in radian
 % usage:
 % [x,y,z] = SphToCart(r,phi,lambda)
@@ -14,11 +14,11 @@
 % z = The x coordinate in the cartesian sythem
 % external calls:
 % none
-% Author: Delaram's Group (Tempname)
+% Author: Delaram + Tim Kröger
 
 function [x,y,z] = SphToCart(r,phi,lambda)
-x=r*cos(lambda)*cos(phi);
-y= r*sin(lambda)*cos(phi);
-z=r*sin(phi);
+x = r * sind(phi) * cosd(lambda);
+y = r * sind(phi) * sind(lambda);
+z = r * cosd(phi);
 end
 
