@@ -17,8 +17,8 @@
 % Author: Delaram + Tim Kröger
 
 function [x,y,z] = SphToCart(r,phi,lambda)
-x = r * sind(phi) * cosd(lambda);
-y = r * sind(phi) * sind(lambda);
-z = r * cosd(phi);
+x = r*cos(lambda)*cos(phi);
+y = r*sin(lambda)*cos(phi);
+z = r*sin(phi);
 end
 

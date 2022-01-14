@@ -1,6 +1,6 @@
 %% precession
 % Discription:
-% Calculates the precession based on Newcomb parameters.
+% Calculates the precession after Newcomb parameters based on J2000.0.
 % usage:
 % [p] = precession(jd)
 % input:

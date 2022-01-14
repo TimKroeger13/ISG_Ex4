@@ -17,8 +17,8 @@
 
 function [r,lamda , phi] = CartToSphe(x,y,z)
 r = sqrt(x^2 + y^2 + z^2);
-lamda = atan2d(y,x);
-phi = atan2d(sqrt(x^2+y^2),z);
+lamda = atan2(y,x);
+phi = atan2(z,sqrt(x^2+y^2));
 end
 
 
