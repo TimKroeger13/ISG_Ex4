@@ -13,7 +13,7 @@
 % lambda <= degree lambda.
 % external calls:
 % none
-% Author: Delaram + Tim Kröger
+% Author: Based on Dr. Robert Heinkelmann
 
 function [r,lamda , phi] = CartToSphe(x,y,z)
 r = sqrt(x^2 + y^2 + z^2);

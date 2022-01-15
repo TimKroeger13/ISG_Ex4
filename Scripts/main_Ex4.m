@@ -134,5 +134,22 @@ hour=2;
 minute=13;
 second=17;
 
+
 polarMotion2021(yyyy,mm,dd,hour,minute,second)
+
+%% Task 4 Sykplot
+
+ICRF3_Cordianes = struct;
+ICRF3_Cordianes.sourceName = ["0454+844";"1101−536";"1111+149";"1738+499"];
+ICRF3_Cordianes.alpha = [[05,08,42.36351222];...
+    [11,03,52.22168463];...
+    [11,13,58.69508613];...
+    [17,39,27.39049431]];
+ICRF3_Cordianes.delta = [[84,32,04.5441733];...
+    [-53,57,00.6966389];...
+    [14,42,26.9526507];...
+    [49,55,03.3683385]];
+
+
+
 

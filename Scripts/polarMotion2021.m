@@ -38,8 +38,6 @@ end
 if (~isnumeric(second))
     error("second is not numeric")
 end
-
-
 if (mm<1 || mm>12)
     error("month must be a number between 1 and 12")
 end
@@ -58,7 +56,6 @@ end
 if(yyyy ~= 2021)
     error("currently only operating on year 2021")
 end
-
 if(mm==12 && dd > 12 && (minute>0 || seconds>0))
     error("Sorry but the Database is currently only based on data " + ...
         "till the 12.12.2021 at midnight")

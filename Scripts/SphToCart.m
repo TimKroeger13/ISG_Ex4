@@ -14,7 +14,7 @@
 % z = The x coordinate in the cartesian sythem
 % external calls:
 % none
-% Author: Delaram + Tim Kröger
+% Author: Based on Dr. Robert Heinkelmann
 
 function [x,y,z] = SphToCart(r,phi,lambda)
 x = r*cos(lambda)*cos(phi);
