@@ -96,13 +96,13 @@ Post_y = Post_date(colum_y);
 
 TimePercent = hour/24 + minute/24/60 + second/24/60/60;
 
-x = interp1([0,Pre_x;1,Post_x],1+TimePercent,'linear'); %arcsec
-y = interp1([0,Pre_y;1,Post_y],1+TimePercent,'linear'); %arcsec
+x = interp1([0,1],[Pre_x,Post_x],TimePercent,'linear'); %arcsec
+y = interp1([0,1],[Pre_y,Post_y],TimePercent,'linear'); %arcsec
 
 %arcseconds to degree
 
-x = x(2)/3600;
-y = y(2)/3600;
+x = x/3600;
+y = y/3600;
 
 W = rot3d(-x,2) * rot3d(-y,1);
 
