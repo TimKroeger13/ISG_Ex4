@@ -125,17 +125,17 @@ ylabel(hAx(2),'\delta (deg)') % right y-axis
 
 %% Task 3 - xxx
 
-[jd,mjd] = gre2jd(2021,6,11,0,0,0); %Running Julian Day
+[jd,~] = gre2jd(2021,6,11,0,0,0); %Running Julian Day
 
+%test Values
 yyyy=2021;
 mm=3;
 dd=6;
 hour=2;
 minute=13;
-second=17;
+second=0; %17
 
-
-polarMotion2021(yyyy,mm,dd,hour,minute,second)
+polarMotion2021(yyyy,mm,dd,hour,minute,second);
 
 %% Task 4 Sykplot
 
@@ -149,6 +149,140 @@ ICRF3_Cordianes.delta = [[84,32,04.5441733];...
     [-53,57,00.6966389];...
     [14,42,26.9526507];...
     [49,55,03.3683385]];
+
+%Fix values from Hour to degrees
+ICRF3_Cordianes.alpha(:,1) = ICRF3_Cordianes.alpha(:,1) * 360/24;
+
+%Convert values to decimaldegree
+alpha_degrees = zeros(1,length(ICRF3_Cordianes.sourceName))';
+delta_degrees = zeros(1,length(ICRF3_Cordianes.sourceName))';
+
+for i = 1:length(ICRF3_Cordianes.sourceName)
+
+alpha_degrees(i,1) = De_Mi_Se_To_DecDeg([ICRF3_Cordianes.alpha(i,:)]);
+delta_degrees(i,1) = De_Mi_Se_To_DecDeg([ICRF3_Cordianes.delta(i,:)]);
+
+end
+
+ICRF3_Cordianes.alpha_degrees = alpha_degrees;
+ICRF3_Cordianes.delta_degrees = delta_degrees;
+
+%Get X,Y and Z for all objects
+
+CartesianCoordinates  = zeros(length(ICRF3_Cordianes.sourceName),3);
+
+for i = 1:length(ICRF3_Cordianes.sourceName)
+
+ %delta = phi / alpha = lamda
+
+    [x,y,z] = SphToCart(1, ICRF3_Cordianes.delta_degrees(i,1),...
+        ICRF3_Cordianes.alpha_degrees(i,1)); 
+
+    CartesianCoordinates(i,:) = [x,y,z];
+
+end
+
+ICRF3_Cordianes.CartesianCoordinates = CartesianCoordinates;
+
+%calculate Azimuth and elevation
+
+%observatory near Berlin
+Lamda = De_Mi_Se_To_DecDeg([13,24,0]); %13°24′
+Phi = De_Mi_Se_To_DecDeg([52,36,0]); %52°36′
+M1 = ref3d(1);
+
+%Left equation - time independent
+
+LeEq = M1 * rot3d(((pi/2)-Phi),2) * rot3d(Lamda,3);
+
+%time
+yyyy=2021;
+mm=6;
+dd=11;
+
+%Loop
+
+A = zeros(1,24*60);
+E = zeros(1,24*60);
+
+counter = 0;
+
+ICRF3_Cordianes.HorizonCoordinates.Ob1 = zeros(24*60,2);
+ICRF3_Cordianes.HorizonCoordinates.Ob2 = zeros(24*60,2);
+ICRF3_Cordianes.HorizonCoordinates.Ob3 = zeros(24*60,2);
+ICRF3_Cordianes.HorizonCoordinates.Ob4 = zeros(24*60,2);
+
+fieldNames = fieldnames(ICRF3_Cordianes.HorizonCoordinates);
+
+for ut1 = 0:23
+    for minute = 0:59
+
+        counter = counter+1;
+
+        %Julain Date
+        [jd,~] = gre2jd(yyyy,mm,dd,ut1,minute,0); 
+
+        %JD2000 in centurys
+        t = (jd - 2451545.0)/36525;
+
+        %Greenwich Apparent Sidereal Time
+        GMST = (F(jd)*86400 + 24110.54841 -86400/2 + ...
+            8640184.812866 * t + 0.093104 * t * t -...
+            6.2e-6 * t * t * t)/3600; % hour
+
+        %Ploar Motion
+        W = polarMotion2021(yyyy,mm,dd,ut1,minute,0);
+
+        %Precession
+        P = precession(jd);
+
+        %Nutation
+        N = nutation(jd);
+
+        %Objects
+
+        for k = 1:length(ICRF3_Cordianes.sourceName)
+
+            Xg = LeEq * W * rot3d(GMST,3) * N * P *...
+            ICRF3_Cordianes.CartesianCoordinates(k,:)';
+            A = atan2d(Xg(2),Xg(1));
+            E = atand(Xg(3)/sqrt(Xg(1)^2 + Xg(2)^2));
+
+            %Shift Azimuth definition interval
+
+            if(A<0)
+                A = A + 360;
+            end
+
+            ICRF3_Cordianes.HorizonCoordinates.(fieldNames{k})(counter,:) = [A,E];
+        end
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

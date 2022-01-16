@@ -20,8 +20,8 @@ if (~isnumeric(De_Mi_Se_Matrix))
     error("vectorOfDecDeg must be numeric.")
 end
 
-if (sum(De_Mi_Se_Matrix(:,1)>180) || sum(De_Mi_Se_Matrix(:,1)<-180))
-    error("Hours must be between -180 and 180")
+if (sum(De_Mi_Se_Matrix(:,1)>360) || sum(De_Mi_Se_Matrix(:,1)<-360))
+    error("Hours must be between -360 and 360")
 end
 if (sum(De_Mi_Se_Matrix(:,2)>60))
     error("Minutes must be between 0 and 60")
